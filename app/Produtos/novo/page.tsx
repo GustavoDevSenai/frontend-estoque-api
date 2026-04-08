@@ -1,6 +1,5 @@
 'use client'
 import { useState } from "react"
-import toast from "react-hot-toast"
 import Swal from "sweetalert2"
 
 export default function NovoProduto() {
