@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface Produto {
@@ -10,12 +11,33 @@ interface Produto {
 }
 
 export default function Produtos() {
+
+  const router = useRouter()
   const [produtos, setProdutos] = useState<Produto[]>([])
 
   // Carrega produtos ao montar componente
   useEffect(() => {
     async function fetchProdutos() {
-      const res = await fetch('http://localhost:3001/produtos')
+
+      const token = localStorage.getItem("token")
+
+      if(!token){
+        router.push("/Login")
+        return
+      }
+
+      const res = await fetch('http://localhost:3001/produtos',{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+
+      if(res.status === 401){
+        localStorage.removeItem("token")
+        router.push("/Login")
+        return
+      }
+
       const data = await res.json()
       setProdutos(data)
     }
@@ -26,8 +48,13 @@ export default function Produtos() {
     const confirmacao = confirm("Tem certeza que deseja excluir esse produto?")
     if (!confirmacao) return
 
+    const token = localStorage.getItem("token")
+
     const res = await fetch(`http://localhost:3001/produtos/${id}`, {
       method: "DELETE",
+       headers: {
+          Authorization: `Bearer ${token}`
+      }
     })
 
     if (!res.ok) {
