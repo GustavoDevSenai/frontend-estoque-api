@@ -1,5 +1,5 @@
 "use client"
-
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function Register() {
@@ -7,6 +7,8 @@ export default function Register() {
     //state pra cada input
     const [email,setEmail] = useState("")
     const [senha,setSenha] = useState("")
+
+    const router = useRouter()
 
     //funcao pra submeter o formulario
     async function handleSubmit(e: any) {
@@ -25,10 +27,12 @@ export default function Register() {
             })
 
             const data = await response.json()
+            console.log(data)
             if(!response.ok) return
             alert("Usuario cadastrado!")
             setEmail("")
             setSenha("")
+            router.push("/Login")
 
         } catch (error) {
             console.log(error)
@@ -71,6 +75,7 @@ export default function Register() {
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-2 rounded-md"
+          
         >
           Cadastrar
         </button>

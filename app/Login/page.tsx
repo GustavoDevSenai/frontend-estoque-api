@@ -1,16 +1,43 @@
 
 "use client"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 
 export default function Login() {
 
+    const router = useRouter()
 
-     const router = useRouter()
+    const [email, setEmail] = useState("")
+    const [senha, setSenha] = useState("")
+
+    //funcao que faz o envio das informacoes pra o backend e salva o token no localstorage
+    async function handleLogin(e:any) {
+        e.preventDefault()
+        
+        const response = await fetch("http://localhost:3001/auth/login",{
+            method: 'POST',
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({email,senha})
+        })
+
+        const data = await response.json()
+        console.log(data)
+        //Salvar o token
+        localStorage.setItem("token", data.acess_token)
+        //Redireciona pra pagina de produtos
+        router.push("/Produtos")
+
+    }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       
-      <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm space-y-4">
+      <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm space-y-4"
+      
+      onSubmit={handleLogin}   
+      
+      >
         
         <h2 className="text-2xl font-semibold text-center">
           Login
