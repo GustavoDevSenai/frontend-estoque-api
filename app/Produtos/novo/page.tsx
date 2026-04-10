@@ -1,5 +1,7 @@
 'use client'
-import { useState } from "react"
+import router, { useRouter } from "next/navigation"
+
+import { useEffect, useReducer, useState } from "react"
 import Swal from "sweetalert2"
 
 export default function NovoProduto() {
@@ -9,9 +11,29 @@ export default function NovoProduto() {
   const [estoque, setEstoque] = useState(0)
   const [estoqueMinimo, setEstoqueMinimo] = useState(0)
 
+  const router = useRouter()
+
+  useEffect(() => {
+  const token = localStorage.getItem("token")
+
+  if (!token) {
+    router.push("/Login")
+  }
+}, [])
+ 
 
   async function handleSubmit(e:any) {
     e.preventDefault()
+
+     const token = localStorage.getItem("token")
+
+     if(!token){
+      Swal.fire({
+        icon:"error",
+        title:"Usuario não autenticado"
+      })
+      return
+     }
 
     const produto = {
       nome,
@@ -22,7 +44,9 @@ export default function NovoProduto() {
 
     await fetch('http://localhost:3001/produtos',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json',
+              'Authorization':`Bearer ${token}`
+      },
       body:JSON.stringify(produto)
     })
 

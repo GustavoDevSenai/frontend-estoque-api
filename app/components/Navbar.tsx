@@ -26,7 +26,7 @@ export default function Navbar(){
         }}>
 
             <div>
-                <Link href="/" style={{marginLeft:'10px'}}>Home</Link>
+               
                 <Link href="/Produtos/novo" style={{marginLeft:'10px'}}>Novo Produto</Link>
                 <Link href="/Produtos" style={{marginLeft:'10px'}}>Produtos</Link>
                 <Link href="/Movimentacao" style={{marginLeft:'10px'}}>Movimentação</Link>
