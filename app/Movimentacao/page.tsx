@@ -18,19 +18,15 @@ export default function Movimentacao(){
     const [tipo, setTipo] = useState("entrada")
     const [quantidade, setQuantidade] = useState("")
 
-    // ✅ Carregar produtos protegidos
+    
     useEffect(()=>{
-
         async function carregarProdutos(){
-
             const token = localStorage.getItem("token")
-
             // se não estiver logado
             if(!token){
                 router.push("/Login")
                 return
             }
-
             const res = await fetch("http://localhost:3001/produtos",{
                 headers:{
                     Authorization:`Bearer ${token}`
